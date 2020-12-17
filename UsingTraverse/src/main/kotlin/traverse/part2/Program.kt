@@ -11,7 +11,7 @@ fun propertyViaFile(path: String, name: String): Either<String, String> = try {
     val propertyValue = { str: String -> str.substring(str.indexOf("=") + 1)}
     val lines = Files.lines(Paths.get("input",path))
     lines
-        .filter { it.startsWith(name) }
+        .filter { it.startsWith("$name=") }
         .findFirst()
         .map (propertyValue)
         .map { Right(it) as Either<String, String> }

@@ -22,7 +22,7 @@ fun propertyViaFile(path: String, key: String): Either<String, String> = try {
     val propertyValue = { str: String -> str.substring(str.indexOf("=") + 1) }
     val lines = Files.lines(Paths.get("input", path))
     lines
-        .filter { it.startsWith(key) }
+        .filter { it.startsWith("$key=") }
         .findFirst()
         .map(propertyValue)
         .map { Right(it) as Either<String, String> }

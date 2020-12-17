@@ -23,7 +23,7 @@ fun propertyViaFile(path: String, key: String): Validated<String, String> = try 
     val propertyValue = { str: String -> str.substring(str.indexOf("=") + 1) }
     val lines = Files.lines(Paths.get("input", path))
     lines
-        .filter { it.startsWith(key) }
+        .filter { it.startsWith("$key=") }
         .findFirst()
         .map(propertyValue)
         .map { Valid(it) as Validated<String, String> }
