@@ -44,7 +44,7 @@ suspend fun demoTraverse(data: List<String>) {
     val findViaJVM = { input: List<String> -> input.traverse(Either.applicative(), ::propertyViaJVM) }
 
     val findViaFile = { input: List<String> ->
-        val file = "application.properties"
+        val file = "part3.properties"
         input.traverse(Either.applicative()) {
             propertyViaFile(file, it)
         }
@@ -70,9 +70,9 @@ suspend fun demoTraverse(data: List<String>) {
 }
 
 suspend fun main() {
-    System.setProperty("foo", "foo.wibble")
-    System.setProperty("bar", "bar.wibble")
-    System.setProperty("zed", "zed.wibble")
+    System.setProperty("cagney", "cagney.lacy")
+    System.setProperty("starsky", "starsky.hutch")
+    System.setProperty("hart", "hart.hart")
 
-    demoTraverse(listOf("foo", "bar", "zed"))
+    demoTraverse(listOf("cagney", "starsky", "hart"))
 }

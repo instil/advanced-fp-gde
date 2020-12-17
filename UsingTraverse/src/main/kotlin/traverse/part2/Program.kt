@@ -38,7 +38,7 @@ fun demoTraverse(fileName: String, input: List<String>) {
 }
 
 fun main() {
-    val correctName = "application.properties"
+    val correctName = "part2.properties"
     val incorrectName = "false.properties"
 
     demoTraverse(correctName, listOf("foo", "bar", "zed"))
