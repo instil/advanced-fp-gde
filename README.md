@@ -1,29 +1,16 @@
-# README #
+# Advanced FP for the Enterprise Bee #
 
-This README would normally document whatever steps are necessary to get your application up and running.
+This repository contains code samples for a series of articles on advanced Functional Programming in Kotlin. For each article there are one or more projects, each in turn containing a Gradle or SBT build file. The mapping between articles and projects is documented below.
 
-### What is this repository for? ###
+### Traverse ###
 
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+* UsingTraverse
 
-### How do I get set up? ###
+### Applicatives ###
 
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
+* UsingApplicatives
 
-### Contribution guidelines ###
+### Higher Kinded Types ###
 
-* Writing tests
-* Code review
-* Other guidelines
-
-### Who do I talk to? ###
-
-* Repo owner or admin
-* Other community or team contact
+* UsingHKT
+* UsingHKTScala
