@@ -1,9 +1,7 @@
-package applicatives.part5
+package applicatives.part7
 
 import arrow.core.*
-import arrow.core.extensions.semigroup
-import arrow.core.extensions.validated.applicative.applicative
-import arrow.core.extensions.validated.applicative.map
+import arrow.typeclasses.Semigroup
 
 fun queryUser(question: String, pattern: Regex): Validated<String, String> {
     println(question)
@@ -19,9 +17,14 @@ fun main() {
     val name = queryUser("What's your name?", regex)
     val location = queryUser("Where do you live?", regex)
 
-    val applicative = Validated.applicative(String.semigroup())
-    val data = applicative.tupledN(name, location)
-    val result = data.map(String.semigroup()) { "Hello ${it.a} from ${it.b}" }
+    val semigroup = object : Semigroup<String> {
+        override fun String.combine(b: String): String {
+            return "$this , $b"
+        }
+    }
+
+    val action = { name: String, location: String -> "Hello $name from $location" }
+    val result = location.ap(semigroup, name.map(action.curry()))
 
     result.fold({ println("Sorry: $it") }, ::println)
 }

@@ -1,7 +1,6 @@
 package applicatives.part6
 
 import arrow.core.*
-import arrow.core.extensions.semigroup
 import arrow.core.extensions.validated.applicative.applicative
 import arrow.core.extensions.validated.applicative.map
 import arrow.typeclasses.Semigroup
@@ -24,10 +23,12 @@ fun main() {
         override fun String.combine(b: String): String {
             return "$this , $b"
         }
-    }
 
-    val action = { name: String, location: String -> "Hello $name from $location" }
-    val result = location.ap(semigroup, name.map(action.curry()))
+    }
+    val applicative = Validated.applicative(semigroup)
+
+    val data = applicative.tupledN(name, location)
+    val result = data.map(semigroup) { "Hello ${it.a} from ${it.b}" }
 
     result.fold({ println("Sorry: $it") }, ::println)
 }
