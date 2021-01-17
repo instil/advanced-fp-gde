@@ -1,11 +1,15 @@
 package kleisli.part4
 
-import arrow.core.computations.either
+import arrow.core.*
+import arrow.core.extensions.either.applicative.applicative
+import arrow.core.extensions.either.monad.monad
+import arrow.mtl.Kleisli
+import arrow.mtl.fix
 import kleisli.common.addProperties
 import kleisli.common.propertyViaJVM
 
 fun addAtreidesLineage() = addProperties(
-    "Vladimir",
+    "Vladimir Harkonnen",
     "Jessica",
     "Paul",
     "Ghanima",
@@ -17,23 +21,31 @@ fun breakLineage() {
     System.setProperty("Jessica", "Alia")
 }
 
-suspend fun main() {
+fun main() {
     addAtreidesLineage()
-    demoMonadicComposition()
+    demoKleisli()
 
     breakLineage()
-    demoMonadicComposition()
+    demoKleisli()
 }
 
-private suspend fun demoMonadicComposition() {
+private fun demoKleisli() {
+    val eitherMonad = Either.monad<String>()
+    val eitherApplicative = Either.applicative<String>()
 
-    val result = either<String, String> {
-        val a = !propertyViaJVM("Vladimir")
-        val b = !propertyViaJVM(a)
-        val c = !propertyViaJVM(b)
-        val d = !propertyViaJVM(c)
-        !propertyViaJVM(d)
+    val kleisli = Kleisli { key: String ->
+        propertyViaJVM(key)
     }
+
+    val result = kleisli
+        .local { name: String -> "$name Harkonnen" }
+        .andThen(eitherMonad, kleisli)
+        .andThen(eitherMonad, kleisli)
+        .andThen(eitherMonad, kleisli)
+        .andThen(eitherMonad, kleisli)
+        .map(eitherApplicative) { name: String -> "$name Atreides" }
+        .fix()
+        .run("Vladimir")
 
     println(result)
 }

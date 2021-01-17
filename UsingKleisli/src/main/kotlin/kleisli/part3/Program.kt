@@ -1,7 +1,6 @@
 package kleisli.part3
 
 import arrow.core.*
-import arrow.core.extensions.either.applicative.applicative
 import arrow.core.extensions.either.monad.monad
 import arrow.mtl.Kleisli
 import arrow.mtl.fix
@@ -9,7 +8,7 @@ import kleisli.common.addProperties
 import kleisli.common.propertyViaJVM
 
 fun addAtreidesLineage() = addProperties(
-    "Vladimir Harkonnen",
+    "Vladimir",
     "Jessica",
     "Paul",
     "Ghanima",
@@ -30,20 +29,14 @@ fun main() {
 }
 
 private fun demoKleisli() {
-    val eitherMonad = Either.monad<String>()
-    val eitherApplicative = Either.applicative<String>()
-
-    val kleisli = Kleisli { key: String ->
-        propertyViaJVM(key)
-    }
+    val either = Either.monad<String>()
+    val kleisli = Kleisli(::propertyViaJVM)
 
     val result = kleisli
-        .local { name: String -> "$name Harkonnen" }
-        .andThen(eitherMonad, kleisli)
-        .andThen(eitherMonad, kleisli)
-        .andThen(eitherMonad, kleisli)
-        .andThen(eitherMonad, kleisli)
-        .map(eitherApplicative) { name: String -> "$name Atreides" }
+        .andThen(either, kleisli)
+        .andThen(either, kleisli)
+        .andThen(either, kleisli)
+        .andThen(either, kleisli)
         .fix()
         .run("Vladimir")
 
