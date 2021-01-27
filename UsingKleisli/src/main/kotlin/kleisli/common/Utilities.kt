@@ -14,11 +14,10 @@ fun propertyViaJVM(key: String): Either<String, String> {
 }
 
 fun addProperties(vararg items: String) {
-    items.slice(1 until items.size)
-        .fold(items[0]) { last, current ->
-            System.setProperty(last, current)
-            current
-        }
+    items.reduce { last, current ->
+        System.setProperty(last, current)
+        current
+    }
 }
 
 fun printProperties() {

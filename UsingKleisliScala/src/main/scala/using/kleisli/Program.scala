@@ -14,8 +14,7 @@ object Program {
   }
 
   def addProperties(items: String*) {
-    items.slice(1, items.size)
-      .fold(items(0))((last: String, current: String) => {
+    items.reduce((last: String, current: String) => {
         System.setProperty(last, current)
         current
       })
@@ -33,11 +32,10 @@ object Program {
   def breakLineage(): Unit = System.setProperty("Jessica", "Alia")
 
   private def demoKleisli() {
-    def wrap() = Kleisli(propertyViaJVM)
+    val kleisli = Kleisli(propertyViaJVM)
+    val composition = kleisli >=> kleisli >=> kleisli >=> kleisli >=> kleisli
 
-    val kleisli = wrap() >=> wrap() >=> wrap() >=> wrap() >=> wrap()
-
-    val result = kleisli
+    val result = composition
       .map(_ + " Atreides")
       .run("Vladimir")
 
