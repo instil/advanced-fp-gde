@@ -1,6 +1,6 @@
 package typeclasses.marshalling
 
 trait Marshaller[T] {
-  def marshall(input: T): String
-  def unmarshall(input: String): T
+  def marshal(input: T): String
+  def unmarshal(input: String): T
 }

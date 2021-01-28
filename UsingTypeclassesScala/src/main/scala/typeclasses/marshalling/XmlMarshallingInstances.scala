@@ -4,9 +4,9 @@ import typeclasses.{Order, Person}
 
 object XmlMarshallingInstances {
   implicit val personXmlMarshaller: Marshaller[Person] = new Marshaller[Person] {
-    override def marshall(input: Person) = s"<person>${input.name}</person>"
+    override def marshal(input: Person) = s"<person>${input.name}</person>"
 
-    override def unmarshall(input: String): Person = {
+    override def unmarshal(input: String): Person = {
       val regex = "<person>(.+)</person>".r
       val name: String = regex
         .findFirstMatchIn(input)
@@ -17,9 +17,9 @@ object XmlMarshallingInstances {
   }
 
   implicit val orderXmlMarshaller: Marshaller[Order] = new Marshaller[Order] {
-    override def marshall(input: Order) = s"<order>${input.value}</order>"
+    override def marshal(input: Order) = s"<order>${input.value}</order>"
 
-    override def unmarshall(input: String): Order = {
+    override def unmarshal(input: String): Order = {
       val regex = "<order>(.+)</order>".r
       val value = regex
         .findFirstMatchIn(input)

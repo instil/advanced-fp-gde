@@ -5,9 +5,9 @@ import typeclasses.{Order, Person}
 object JsonMarshallingInstances {
 
   implicit val personJsonMarshaller: Marshaller[Person] = new Marshaller[Person] {
-    override def marshall(input: Person) = s"""{ "person": ${input.name} }"""
+    override def marshal(input: Person) = s"""{ "person": ${input.name} }"""
 
-    override def unmarshall(input: String): Person = {
+    override def unmarshal(input: String): Person = {
       val regex = """\{ "person": "(.+)" }""".r
       val name: String = regex
         .findFirstMatchIn(input)
@@ -18,9 +18,9 @@ object JsonMarshallingInstances {
   }
 
   implicit val orderJsonMarshaller: Marshaller[Order] = new Marshaller[Order] {
-    override def marshall(input: Order) = s"""{ "order": ${input.value} }"""
+    override def marshal(input: Order) = s"""{ "order": ${input.value} }"""
 
-    override def unmarshall(input: String): Order = {
+    override def unmarshal(input: String): Order = {
       val regex = """\{ "order": (.+) }""".r
       val value = regex
         .findFirstMatchIn(input)
