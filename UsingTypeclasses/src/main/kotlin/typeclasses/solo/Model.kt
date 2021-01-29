@@ -1,4 +1,4 @@
-package typeclasses
+package typeclasses.solo
 
 class Person(val name: String) {
     override fun toString() = "Person called $name"

@@ -1,6 +1,6 @@
-package typeclasses
+package typeclasses.solo
 
-import typeclasses.marshalling.XmlMarshalling
+import typeclasses.solo.marshalling.XmlMarshalling
 
 fun main() {
     val person1 = Person("Jane")

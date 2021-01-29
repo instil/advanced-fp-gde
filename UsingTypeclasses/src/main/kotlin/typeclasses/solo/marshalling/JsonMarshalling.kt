@@ -1,7 +1,7 @@
-package typeclasses.marshalling
+package typeclasses.solo.marshalling
 
-import typeclasses.Order
-import typeclasses.Person
+import typeclasses.solo.Order
+import typeclasses.solo.Person
 
 object JsonMarshalling {
     fun forPerson(): Marshaller<Person> = PersonJsonMarshaller

@@ -1,6 +1,6 @@
-package typeclasses
+package typeclasses.solo
 
-import typeclasses.marshalling.JsonMarshalling
+import typeclasses.solo.marshalling.JsonMarshalling
 
 fun main() {
     val person1 = Person("Jane")
