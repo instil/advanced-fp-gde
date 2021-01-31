@@ -1,6 +1,5 @@
 package optics.part4
 
-import arrow.optics.Lens
 import arrow.optics.extensions.list.cons.cons
 import optics.part4.dsl.*
 import optics.part4.model.*
@@ -37,37 +36,45 @@ val dsl = spaceInstance("Kotlin Programming for MegaCorp") {
     }
 }
 
-typealias LensToList<T, U> = Lens<U, List<T>>
-
-fun <T, U> insert(container: U, item: T, lens: LensToList<T, U>): U {
-    return lens.modify(container) { item.cons(it) }
+fun main() {
+    val instance = createInstance()
+    println(instance)
 }
 
-fun main() {
+fun createInstance(): Instance {
     var instance = dsl.toInstance()
 
-    dsl.projects.content.forEach { dslProject ->
-        var project = dslProject.toProject()
+    with(dsl.projects) {
+        content.forEach { dslProject ->
+            var project = dslProject.toProject()
 
-        dslProject.content.forEach {
-            project = insert(project, it.toRepo(), Project.repos)
+            dslProject.content.forEach { dslRepo ->
+                val repo = dslRepo.toRepo()
+                project = Project.repos.modify(project) { repo.cons(it) }
+            }
+
+            instance = Instance.projects.modify(instance) { project.cons(it) }
         }
-
-        instance = insert(instance, project, Instance.projects)
     }
 
-    dsl.profiles.content.forEach {
-        instance = insert(instance, it.toProfile(), Instance.profiles)
-    }
+    with(dsl.profiles) {
+        content.forEach { dslProfile ->
+            val profile = dslProfile.toProfile()
 
-    dsl.blogs.content.forEach {
-        var blog = it.toBlog()
-        it.content.forEach { item ->
-            blog = insert(blog, item, Blog.content)
+            instance = Instance.profiles.modify(instance) { profile.cons(it) }
         }
-
-        instance = insert(instance,blog,Instance.blogs)
     }
 
-    println(instance)
+    with(dsl.blogs) {
+        content.forEach { dslBlog ->
+            var blog = dslBlog.toBlog()
+            dslBlog.content.forEach { item ->
+                blog = Blog.content.modify(blog) { item.cons(it) }
+            }
+
+            instance = Instance.blogs.modify(instance) { blog.cons(it) }
+        }
+    }
+
+    return instance
 }

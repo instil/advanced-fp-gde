@@ -1,6 +1,5 @@
 package optics.part3
 
-import arrow.optics.extensions.list.cons.cons
 import optics.part3.dsl.*
 import optics.part3.model.*
 import java.net.URI
@@ -37,6 +36,11 @@ val dsl = spaceInstance("Kotlin Programming for MegaCorp") {
 }
 
 fun main() {
+    val instance = createInstance()
+    println(instance)
+}
+
+fun createInstance(): Instance {
     var instance = dsl.toInstance()
 
     with(dsl.projects) {
@@ -45,10 +49,10 @@ fun main() {
 
             dslProject.content.forEach { dslRepo ->
                 val repo = dslRepo.toRepo()
-                project = Project.repos.modify(project) { repo.cons(it) }
+                project = Project.repos.modify(project) { it.plus(repo) }
             }
 
-            instance = Instance.projects.modify(instance) { project.cons(it) }
+            instance = Instance.projects.modify(instance) { it.plus(project) }
         }
     }
 
@@ -56,7 +60,7 @@ fun main() {
         content.forEach { dslProfile ->
             val profile = dslProfile.toProfile()
 
-            instance = Instance.profiles.modify(instance) { profile.cons(it) }
+            instance = Instance.profiles.modify(instance) { it.plus(profile) }
         }
     }
 
@@ -64,12 +68,12 @@ fun main() {
         content.forEach { dslBlog ->
             var blog = dslBlog.toBlog()
             dslBlog.content.forEach { item ->
-                blog = Blog.content.modify(blog) { item.cons(it) }
+                blog = Blog.content.modify(blog) { it.plus(item) }
             }
 
-            instance = Instance.blogs.modify(instance) { blog.cons(it) }
+            instance = Instance.blogs.modify(instance) { it.plus(blog) }
         }
     }
 
-    println(instance)
+    return instance
 }

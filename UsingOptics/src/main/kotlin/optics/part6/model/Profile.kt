@@ -1,4 +1,4 @@
-package optics.part2.model
+package optics.part6.model
 
 import arrow.optics.optics
 
@@ -7,5 +7,6 @@ import arrow.optics.optics
                    val email: String) {
 
     companion object {}
+
     override fun toString() = "\t\t$forename $surname at $email"
 }

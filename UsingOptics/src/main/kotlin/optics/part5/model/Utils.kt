@@ -1,7 +1,5 @@
 package optics.part5.model
 
-import arrow.core.ListK
-
-fun <T> foldOverChildren(initial: String, children: ListK<T>, indent: String ="\t") = children.fold(initial) { state, child ->
+fun <T> foldOverChildren(initial: String, children: List<T>, indent: String ="\t") = children.fold(initial) { state, child ->
     "$state\n$indent$child"
 }

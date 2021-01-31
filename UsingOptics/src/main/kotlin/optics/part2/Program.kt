@@ -1,7 +1,14 @@
 package optics.part2
 
+import arrow.core.ListK
+import arrow.core.k
+import arrow.optics.dsl.every
+import arrow.optics.dsl.index
+import arrow.optics.extensions.listk.each.each
+import arrow.optics.extensions.listk.index.index
 import optics.part2.dsl.*
 import optics.part2.model.*
+import optics.part2.model.Instance
 import java.net.URI
 
 val dsl = spaceInstance("Kotlin Programming for MegaCorp") {
@@ -36,7 +43,37 @@ val dsl = spaceInstance("Kotlin Programming for MegaCorp") {
 }
 
 fun main() {
-    var instance = dsl.toInstance()
+    val instance = createInstance()
+    println(instance)
+
+    showSimple(instance)
+    showIndexing(instance)
+    showEvery(instance)
+}
+
+private fun showSimple(instance: Instance) {
+    val newInstance = Instance.title.modify(instance) { "$it - as taught by Instil" }
+    println(newInstance)
+}
+
+private fun showIndexing(instance: Instance) {
+    val newInstance = Instance
+        .projects.index(ListK.index(), 1)
+        .repos.index(ListK.index(), 0)
+        .location.modify(instance) { URI("http://nowhere.com") }
+
+    println(newInstance)
+}
+
+private fun showEvery(instance: Instance) {
+    val newInstance = with(Instance.profiles.every(ListK.each())) {
+        forename.modify(instance, String::toUpperCase)
+    }
+    println(newInstance)
+}
+
+fun createInstance(): Instance {
+    var instance = Instance(dsl.title)
 
     with(dsl.projects) {
         content.forEach { dslProject ->
@@ -44,10 +81,10 @@ fun main() {
 
             dslProject.content.forEach { dslRepo ->
                 val repo = dslRepo.toRepo()
-                project = Project.repos.modify(project) { it.plus(repo) }
+                project = project.copy(repos = project.repos.plus(repo).k())
             }
 
-            instance = Instance.projects.modify(instance) { it.plus(project) }
+            instance = instance.copy(projects = instance.projects.plus(project).k())
         }
     }
 
@@ -55,7 +92,7 @@ fun main() {
         content.forEach { dslProfile ->
             val profile = dslProfile.toProfile()
 
-            instance = Instance.profiles.modify(instance) { it.plus(profile) }
+            instance = instance.copy(profiles = instance.profiles.plus(profile).k())
         }
     }
 
@@ -63,12 +100,12 @@ fun main() {
         content.forEach { dslBlog ->
             var blog = dslBlog.toBlog()
             dslBlog.content.forEach { item ->
-                blog = Blog.content.modify(blog) { it.plus(item) }
+                blog = blog.copy(content = blog.content.plus(item).k())
             }
 
-            instance = Instance.blogs.modify(instance) { it.plus(blog) }
+            instance = instance.copy(blogs = instance.blogs.plus(blog).k())
         }
     }
 
-    println(instance)
+    return instance
 }
