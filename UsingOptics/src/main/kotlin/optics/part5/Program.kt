@@ -81,30 +81,23 @@ private fun showEvery(instance: Instance) {
     println(newInstance)
 }
 
-fun createInstance(): Instance {
-    var instance = dsl.toInstance()
-
-    dsl.projects.content.forEach { dslProject ->
-        var project = dslProject.toProject()
-
-        dslProject.content.forEach {
-            project = insert(project, it.toRepo(), Project.repos)
+fun createInstance(): Instance  = with(dsl) {
+    var instance = projects.content.fold(toInstance()) { result, dslProject ->
+        val project = dslProject.content.fold(dslProject.toProject()) { result, dslRepo ->
+            insert(result, dslRepo.toRepo(), Project.repos)
         }
-
-        instance = insert(instance, project, Instance.projects)
+        insert(result, project, Instance.projects)
     }
 
-    dsl.profiles.content.forEach {
-        instance = insert(instance, it.toProfile(), Instance.profiles)
+    instance = profiles.content.fold(instance) { result, dslProfile ->
+        insert(result, dslProfile.toProfile(), Instance.profiles)
     }
 
-    dsl.blogs.content.forEach {
-        var blog = it.toBlog()
-        it.content.forEach { item ->
-            blog = insert(blog, item, Blog.content)
+    instance = blogs.content.fold(instance) { result, dslBlog ->
+        val blog = dslBlog.content.fold(dslBlog.toBlog()) { result, item ->
+            insert(result, item, Blog.content)
         }
-
-        instance = insert(instance,blog,Instance.blogs)
+        insert(result,blog,Instance.blogs)
     }
 
     return instance
