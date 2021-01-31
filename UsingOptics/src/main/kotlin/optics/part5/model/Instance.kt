@@ -1,12 +1,11 @@
 package optics.part5.model
 
-import arrow.core.ListK
 import arrow.optics.optics
 
 @optics data class Instance(val title: String,
-                            val projects: ListK<Project> = ListK.empty(),
-                            val profiles: ListK<Profile> = ListK.empty(),
-                            val blogs: ListK<Blog> = ListK.empty()) {
+                    val projects: List<Project> = emptyList(),
+                    val profiles: List<Profile> = emptyList(),
+                    val blogs: List<Blog> = emptyList()) {
 
     companion object {}
 

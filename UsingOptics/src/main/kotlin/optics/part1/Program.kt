@@ -36,6 +36,11 @@ val dsl = spaceInstance("Kotlin Programming for MegaCorp") {
 }
 
 fun main() {
+    val instance = createInstance()
+    println(instance)
+}
+
+fun createInstance(): Instance {
     var instance = Instance(dsl.title)
 
     with(dsl.projects) {
@@ -70,5 +75,5 @@ fun main() {
         }
     }
 
-    println(instance)
+    return instance
 }

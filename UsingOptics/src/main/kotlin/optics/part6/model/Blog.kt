@@ -1,4 +1,4 @@
-package optics.part2.model
+package optics.part6.model
 
 import arrow.core.ListK
 import arrow.optics.optics
