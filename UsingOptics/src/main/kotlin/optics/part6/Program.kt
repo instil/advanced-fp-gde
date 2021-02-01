@@ -45,16 +45,15 @@ val dsl = spaceInstance("Kotlin Programming for MegaCorp") {
 
 typealias LensToList<T, U> = Lens<U, ListK<T>>
 
-fun <T, U> insert(container: U, item: T, lens: LensToList<T, U>): U {
-    return lens.modify(container) { item.cons(it).k() }
-}
-
 fun main() {
     val instance = createInstance()
     println(instance)
 }
 
 fun createInstance(): Instance  = with(dsl) {
+    fun <T, U> insert(container: U, item: T, lens: LensToList<T, U>): U {
+        return lens.modify(container) { item.cons(it).k() }
+    }
     var instance = projects.content.fold(toInstance()) { result, dslProject ->
         val project = dslProject.content.fold(dslProject.toProject()) { result, dslRepo ->
             insert(result, dslRepo.toRepo(), Project.repos)
