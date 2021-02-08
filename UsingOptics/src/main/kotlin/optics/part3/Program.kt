@@ -40,6 +40,12 @@ fun main() {
     println(instance)
 }
 
+fun DslRepo.toRepo() = Repo(location)
+fun DslBlog.toBlog() = Blog(title, location)
+fun DslInstance.toInstance() = Instance(title)
+fun DslProfile.toProfile() = Profile(forename, surname, email)
+fun DslProject.toProject() = Project(name, key)
+
 fun createInstance(): Instance {
     var instance = dsl.toInstance()
 

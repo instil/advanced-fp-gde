@@ -44,6 +44,12 @@ fun main() {
     println(instance)
 }
 
+fun DslRepo.toRepo() = Repo(location)
+fun DslBlog.toBlog() = Blog(title, location)
+fun DslInstance.toInstance() = Instance(title)
+fun DslProfile.toProfile() = Profile(forename, surname, email)
+fun DslProject.toProject() = Project(name, key)
+
 fun createInstance(): Instance {
     fun <T, U> insert(container: U, item: T, lens: LensToList<T, U>): U {
         return lens.modify(container) { item.cons(it) }

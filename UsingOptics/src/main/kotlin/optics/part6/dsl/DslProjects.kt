@@ -1,13 +1,9 @@
 package optics.part6.dsl
 
-import optics.part6.model.Project
-import optics.part6.model.Repo
 import java.net.URI
 
 @SpaceEntityMarker
-class DslRepo(val location: URI) {
-    fun toRepo() = Repo(location)
-}
+class DslRepo(val location: URI)
 
 @SpaceEntityMarker
 class DslProject(val name: String, val key: String) {
@@ -15,8 +11,6 @@ class DslProject(val name: String, val key: String) {
 
     fun repo(location: URI, action: DslRepo.() -> Unit) =
         DslRepo(location).apply(action).also { content.add(it) }
-
-    fun toProject() = Project(name, key)
 }
 
 @SpaceEntityMarker

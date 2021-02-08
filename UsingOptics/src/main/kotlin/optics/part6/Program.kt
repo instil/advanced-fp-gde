@@ -3,11 +3,7 @@ package optics.part6
 import arrow.core.ListK
 import arrow.core.k
 import arrow.optics.Lens
-import arrow.optics.dsl.every
-import arrow.optics.dsl.index
 import arrow.optics.extensions.list.cons.cons
-import arrow.optics.extensions.listk.each.each
-import arrow.optics.extensions.listk.index.index
 import optics.part6.dsl.*
 import optics.part6.model.*
 import java.net.URI
@@ -49,6 +45,12 @@ fun main() {
     val instance = createInstance()
     println(instance)
 }
+
+fun DslRepo.toRepo() = Repo(location)
+fun DslBlog.toBlog() = Blog(title, location)
+fun DslInstance.toInstance() = Instance(title)
+fun DslProfile.toProfile() = Profile(forename, surname, email)
+fun DslProject.toProject() = Project(name, key)
 
 fun createInstance(): Instance  = with(dsl) {
     fun <T, U> insert(container: U, item: T, lens: LensToList<T, U>): U {

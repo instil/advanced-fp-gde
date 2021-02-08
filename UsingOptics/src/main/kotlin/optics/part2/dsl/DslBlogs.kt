@@ -1,14 +1,10 @@
 package optics.part2.dsl
 
-import optics.part2.model.Blog
-
 @SpaceEntityMarker
 class DslBlog(val title: String, val location: String) {
     val content = mutableListOf<String>()
 
     operator fun String.unaryPlus() = content.add(this)
-
-    fun toBlog() = Blog(title, location)
 }
 
 @SpaceEntityMarker
