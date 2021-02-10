@@ -52,10 +52,10 @@ fun tab(num: Int) = "".padStart(num,'\t')
 
 fun displayInstance(instance: Instance) {
     val result = State.fx<Instance, ForId, List<String>>(Id.monad()) {
-        val title = !displayTitle(instance)
-        val profiles = !displayProfiles(instance)
-        val projects = !displayProjects(instance)
-        val blogs = !displayBlogs(instance)
+        val title = !displayTitle()
+        val profiles = !displayProfiles()
+        val projects = !displayProjects()
+        val blogs = !displayBlogs()
 
         listOf(title, profiles, projects, blogs).flatten()
     }.runA(Id.monad(), instance).fix()
@@ -63,11 +63,11 @@ fun displayInstance(instance: Instance) {
     result.value().forEach(::println)
 }
 
-fun displayTitle(instance: Instance) = State<Instance, List<String>> {
+fun displayTitle() = State<Instance, List<String>> { instance ->
     instance toT ListK.just(instance.title)
 }
 
-fun displayProjects(instance: Instance) = State<Instance, List<String>> {
+fun displayProjects() = State<Instance, List<String>> { instance ->
     val output = instance.projects.flatMap { project ->
         val title = "${tab(2)}Project '${project.name}' (${project.key}) with repos:"
         val repos = project.repos.map { repo ->
@@ -78,14 +78,14 @@ fun displayProjects(instance: Instance) = State<Instance, List<String>> {
     instance toT "${tab(1)}Projects are:".cons(output)
 }
 
-fun displayProfiles(instance: Instance) = State<Instance, List<String>> {
+fun displayProfiles() = State<Instance, List<String>> { instance ->
     val output = instance.profiles.map {
         "${tab(2)}${it.forename} ${it.surname} at ${it.email}"
     }
     instance toT "${tab(1)}Profiles are:".cons(output)
 }
 
-fun displayBlogs(instance: Instance) = State<Instance, List<String>> {
+fun displayBlogs() = State<Instance, List<String>> { instance ->
     val output:List<String> = instance.blogs.flatMap {
         listOf("${tab(2)}${it.title}", "${tab(3)}${it.location}")
             .plus(it.content.map{ str -> "${tab(3)}$str" })
