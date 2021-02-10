@@ -6,7 +6,7 @@ import arrow.mtl.State
 import arrow.mtl.extensions.fx
 import arrow.optics.Lens
 import arrow.optics.extensions.list.cons.cons
-import state.part1.dsl.spaceInstance
+import state.part1.dsl.*
 import state.part1.model.*
 import java.net.URI
 
@@ -93,6 +93,12 @@ fun displayBlogs(instance: Instance) = State<Instance, List<String>> {
     }
     instance toT "${tab(1)}Blogs are:".cons(output)
 }
+
+fun DslRepo.toRepo() = Repo(location)
+fun DslBlog.toBlog() = Blog(title, location)
+fun DslInstance.toInstance() = Instance(title)
+fun DslProfile.toProfile() = Profile(forename, surname, email)
+fun DslProject.toProject() = Project(name, key)
 
 fun createInstance(): Instance = with(dsl) {
     fun <T, U> insert(container: U, item: T, lens: LensToList<T, U>): U {

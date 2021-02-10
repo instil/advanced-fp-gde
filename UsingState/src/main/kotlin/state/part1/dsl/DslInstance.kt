@@ -1,7 +1,5 @@
 package state.part1.dsl
 
-import state.part1.model.Instance
-
 fun spaceInstance(title: String = "An Instil Delivery",
                   action: DslInstance.() -> Unit) = DslInstance(title).apply(action)
 
@@ -14,6 +12,4 @@ class DslInstance(val title: String) {
     fun profiles(action: DslProfiles.() -> Unit) = DslProfiles().apply(action).also { this.profiles = it }
     fun projects(action: DslProjects.() -> Unit) = DslProjects().apply(action).also { this.projects = it }
     fun blogs(action: DslBlogs.() -> Unit) = DslBlogs().apply(action).also { this.blogs = it }
-
-    fun toInstance() = Instance(title)
 }

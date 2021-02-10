@@ -1,14 +1,10 @@
 package state.part0.dsl
 
-import state.part0.model.Profile
-
 @SpaceEntityMarker
 class DslProfile {
     lateinit var forename: String
     lateinit var surname: String
     lateinit var email: String
-
-    fun toProfile() = Profile(forename, surname, email)
 }
 
 @SpaceEntityMarker

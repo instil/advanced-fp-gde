@@ -3,7 +3,7 @@ package state.part0
 import arrow.core.*
 import arrow.optics.Lens
 import arrow.optics.extensions.list.cons.cons
-import state.part0.dsl.spaceInstance
+import state.part0.dsl.*
 import state.part0.model.*
 import java.net.URI
 
@@ -44,6 +44,12 @@ fun main() {
     val instance = createInstance()
     println(instance)
 }
+
+fun DslRepo.toRepo() = Repo(location)
+fun DslBlog.toBlog() = Blog(title, location)
+fun DslInstance.toInstance() = Instance(title)
+fun DslProfile.toProfile() = Profile(forename, surname, email)
+fun DslProject.toProject() = Project(name, key)
 
 fun createInstance(): Instance = with(dsl) {
     fun <T, U> insert(container: U, item: T, lens: LensToList<T, U>): U {
